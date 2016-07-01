@@ -1,17 +1,16 @@
 # ofxThreadedSlideshow
 
-# This is an addon for openFrameworks - tested on version 0.9.3 Linux x64
-# Written by Aaron Bocanegra of Nontrivial Studio
-# Creative Commons Attribution-ShareAlike 4.0 International License
-# June 2016
-#
-# This is the first version. Updates will include:
-#    The ability to load images via URL rather than just locally.
-#    Video player implementation, so images and videos can be played.
+ This is an addon for openFrameworks - tested on version 0.9.3 Linux x64
+ Written by Aaron Bocanegra of Nontrivial Studio
+ Creative Commons Attribution-ShareAlike 4.0 International License
+ June 2016
 
-# Formats searched for in directory: png, jpg, bmp, gif (non-animated), tif, psd    
+ This is the first version. Updates will include:
+    The ability to load images via URL rather than just locally.
+    Video player implementation, so images and videos can be played.
+ Formats searched for in directory: png, jpg, bmp, gif (non-animated), tif, psd    
  
-# Initialization Options 
+ Initialization Options 
     ofxThreadedSlideshow()
     {
         mode = 0; // 0 = Local, 1 = URL Currently only mode 0 (local)
@@ -30,13 +29,13 @@
         stretch = false;     //Stretch image to fill screen
     }
     
-#Basic Usage
-##########################ofApp.h
+##Basic Usage
+ofApp.h
 #include "ofxThreadedSlideshow.h"
     ofImage slide;
     ofxThreadedSlideshow slideshow;
-##########################ofApp.cpp
-//--------------------------------------------------------------
+ofApp.cpp
+
 void ofApp::setup(){
     ...
     //Setup Slideshow and start thread
@@ -54,7 +53,7 @@ void ofApp::setup(){
     slide.allocate(slideshow.width,slideshow.height,OF_IMAGE_COLOR_ALPHA);
 }
 
-//--------------------------------------------------------------
+
 void ofApp::update(){
     ...
     if(slideshow.isThreadRunning() && slideshow.isNewFrame){
@@ -63,7 +62,7 @@ void ofApp::update(){
     }
 }
 
-//--------------------------------------------------------------
+
 void ofApp::draw(){
     ofSetColor(255,slideshow.fadeAlpha);
     slide.draw(slideshow.getPos(), slideshow.scaledWidth, slideshow.scaledHeight);
