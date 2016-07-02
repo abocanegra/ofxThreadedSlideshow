@@ -192,7 +192,6 @@ public:
     }
 
     void setPosSize(float imgWidth, float imgHeight){
-        cout << "original: " << imgWidth << "x" << imgHeight << endl;
         if(this->stretch){
             this->scaledWidth = this->width;
             this->scaledHeight = this->height;
@@ -324,7 +323,6 @@ public:
                 this->scaledX = 0;
                 this->scaledY = 0;
             }
-            cout << "Scaled: " << this->scaledWidth << "x" << this->scaledHeight  << endl;
         }
 
         this->currentWidth = imgWidth;
