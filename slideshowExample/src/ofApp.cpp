@@ -16,7 +16,7 @@ void ofApp::setup(){
     slideshow.fade = true;
     slideshow.showInfo = true;
     slideshow.center = true;
-    slideshow.scale = false;
+    slideshow.scale = true;
     slideshow.start();
 
     //Allocate Slide
@@ -84,6 +84,7 @@ void ofApp::keyPressed(int key){
     }
     if(key == OF_KEY_RIGHT){
         if(slideshow.slideshowInit){
+            slideshow.fadeAlpha = 255;
            slide.load(slideshow.currentImage());
            slideshow.setPosSize(slide.getWidth(), slide.getHeight());
         }
@@ -92,6 +93,7 @@ void ofApp::keyPressed(int key){
 
     if(key == OF_KEY_LEFT){
         if(slideshow.slideshowInit){
+            slideshow.fadeAlpha = 255;
            slide.load(slideshow.previousImage());
            slideshow.setPosSize(slide.getWidth(), slide.getHeight());
         }

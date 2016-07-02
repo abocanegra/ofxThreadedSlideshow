@@ -154,12 +154,12 @@ public:
             // Unlock the mutex.  This is only
             // called if lock() returned true above.
             if(this->showInfo){
-            this->info = "Images: "
-                    + ofToString( getTotalImages() )
-                    + " | Time: "
-                    + ofToString( timeDiff() )
-                    + " | Current: "
-                    + getCurrentImageName();
+                this->info = "Images: "
+                        + ofToString( getTotalImages() )
+                        + " | Time: "
+                        + ofToString( timeDiff() )
+                        + " | Current: "
+                        + getCurrentImageName();
             }
             unlock();
 
@@ -192,6 +192,7 @@ public:
     }
 
     void setPosSize(float imgWidth, float imgHeight){
+        cout << "original: " << imgWidth << "x" << imgHeight << endl;
         if(this->stretch){
             this->scaledWidth = this->width;
             this->scaledHeight = this->height;
@@ -200,68 +201,94 @@ public:
         }else{
             if(imgWidth > imgHeight){
                 orientation = "landscape";
-
                 //Image Smaller than ofImage
-                if(imgWidth < (float)this->width ){
+                if(imgWidth < this->width  &&  imgHeight < this->height){
                     if(this->scale){
                         ratio = (float)this->width / imgWidth;
-                        this->scaledWidth = this->width;
+                        this->scaledWidth =this->width;
                         this->scaledHeight = imgHeight * ratio;
+                        if(this->scaledHeight > this->height){
+                            ratio = (float)this->height / this->scaledHeight;
+                            this->scaledWidth = this->scaledWidth* ratio;
+                            this->scaledHeight = this->height;
+                        }
                     }else{
                         this->scaledWidth = imgWidth;
                         this->scaledHeight = imgHeight;
                     }
                     //Image Larger than ofImage
-                }else if(imgWidth > (float)this->width ){
-                    ratio = (float)this->width / imgWidth;
-                    this->scaledWidth = this->width;
-                    this->scaledHeight = imgHeight * ratio;
+                }else if(imgWidth > this->width || imgHeight > this->height ){
+                    if(imgWidth > this->width){
+                        ratio = (float)this->width / imgWidth;
+                        this->scaledWidth = this->width;
+                        this->scaledHeight = imgHeight * ratio;
+                    }else if(imgHeight > this->height){
+                        ratio = (float)this->height / imgHeight;
+                        this->scaledWidth = imgWidth * ratio;
+                        this->scaledHeight = this->height;
+                    }
+                    if(this->scaledHeight > this->height){
+                        ratio = (float)this->height/this->scaledHeight;
+                        this->scaledWidth = this->scaledWidth * ratio;
+                        this->scaledHeight = this->height;
+                    }
+                    if(this->scaledWidth > this ->width){
+                        ratio = (float)this->width/this->scaledWidth;
+                        this->scaledWidth = this->width;
+                        this->scaledHeight = this->height* ratio;
+                    }
                     //Image is the same as ofImage
                 }else{
                     this->scaledWidth = imgWidth;
                     this->scaledHeight = imgHeight;
                 }
-                if(this->center){
-                    this->scaledX = (this->width / 2) - (this->scaledWidth/2);
-                    this->scaledY = (this->height /2) - ( this->scaledHeight/2);
-                }else{
-                    this->scaledX = 0;
-                    this->scaledY = 0;
-                }
             }else if(imgHeight > imgWidth){
                 orientation = "portrait";
                 //Image Smaller Than ofImage
-                if(imgHeight < (float)this->height){
+                if(imgHeight < this->height && imgWidth < this->width){
                     if(this->scale){
                         ratio = (float)this->height / imgHeight;
                         this->scaledWidth = imgWidth * ratio;
                         this->scaledHeight = this->height;
+                        if(this->scaledWidth > this->width){
+                            ratio = (float)this->width / this->scaledWidth;
+                            this->scaledWidth = this->width;
+                            this->scaledHeight = this->scaledHeight* ratio;
+                        }
                     }else{
                         this->scaledWidth = imgWidth;
                         this->scaledHeight = imgHeight;
                     }
                     //Image Larger than OFImage
-                }else if(imgHeight > (float)this->height){
-                    ratio = (float)this->height / imgHeight;
-
-                    this->scaledHeight = this->height;
-                    this->scaledWidth = imgWidth * ratio;
+                }else if(imgHeight > this->height || imgWidth > this->width){
+                    if(imgHeight > this->height){
+                        ratio = (float)this->height / imgHeight;
+                        this->scaledHeight = this->height;
+                        this->scaledWidth = imgWidth * ratio;
+                    }else  if(imgWidth > this->width){
+                        ratio = (float)this->width / imgWidth;
+                        this->scaledHeight = imgHeight * ratio;
+                        this->scaledWidth = this->width;
+                    }
+                    if(this->scaledWidth > this->width){
+                        ratio = (float)this->width/this->scaledWidth;
+                        this->scaledHeight = this->scaledHeight * ratio;
+                        this->scaledWidth = this->width;
+                    }
+                    if(this->scaledHeight > this->height){
+                        ratio = (float)this->height/this->scaledHeight;
+                        this->scaledHeight = this->height;
+                        this->scaledWidth = this->scaledWidth* ratio;
+                    }
                     //Image is the same as ofImage
                 }else{
                     this->scaledWidth = imgWidth;
                     this->scaledHeight = imgHeight;
                 }
-                if(this->center){
-                    this->scaledX = (this->width /2) - (this->scaledWidth/2);
-                    this->scaledY = (this->height /2) - (this->scaledHeight/2);
-                }else{
-                    this->scaledX = 0;
-                    this->scaledY = 0;
-                }
             }else if(imgHeight == imgWidth){
                 orientation = "square";
                 //Image Smaller Than ofImage
-                if(imgHeight < (float)this->height){
+                if(imgHeight < this->height && imgWidth < this->width){
                     if(this->scale){
                         if(this->width > this->height){
                             this->scaledWidth = this->height;
@@ -275,26 +302,31 @@ public:
                         this->scaledHeight = imgHeight;
                     }
                     //Image Larger than ofImage
-                }else if(imgHeight > (float)this->height){
-                    ratio = (float)this->height / imgHeight;
-
-                    this->scaledHeight = this->height;
-                    this->scaledWidth = imgWidth * ratio;
+                }else if(imgHeight > this->height || imgWidth > this->width){
+                    if(this->width > this->height){
+                        this->scaledWidth = this->height;
+                        this->scaledHeight = this->height;
+                    }else{
+                        this->scaledWidth = this->width;
+                        this->scaledHeight = this->width;
+                    }
                     //Image Same size as ofImage
                 }else{
                     this->scaledWidth = imgWidth;
                     this->scaledHeight = imgHeight;
                 }
-
-                if(this->center){
-                    this->scaledX = (this->width /2) - (this->scaledWidth/2);
-                    this->scaledY = (this->height /2) - (this->scaledHeight/2);
-                }else{
-                    this->scaledX = 0;
-                    this->scaledY = 0;
-                }
             }
+            //Positioning
+            if(this->center){
+                this->scaledX = (this->width /2) - (this->scaledWidth/2);
+                this->scaledY = (this->height /2) - (this->scaledHeight/2);
+            }else{
+                this->scaledX = 0;
+                this->scaledY = 0;
+            }
+            cout << "Scaled: " << this->scaledWidth << "x" << this->scaledHeight  << endl;
         }
+
         this->currentWidth = imgWidth;
         this->currentHeight = imgHeight;
     }
@@ -349,8 +381,8 @@ protected:
                     if(this->fadeAlpha <= 0 ){
                         this->isNewFrame = true;
                         this->fadeUp = true;
-                   }
-                //New Frame No Fade
+                    }
+                    //New Frame No Fade
                 }else{
                     this->isNewFrame = true;
                 }
