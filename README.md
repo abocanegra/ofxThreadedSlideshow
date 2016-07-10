@@ -5,7 +5,7 @@
  Creative Commons Attribution-ShareAlike 4.0 International License
  June 2016
 
- ##Current Functionality:
+##Current Functionality:
  Threaded slideshow of images or video.
  See below for user specific settings.
  Handles auto scaling, fit to window, no scaling, stretch, centering
