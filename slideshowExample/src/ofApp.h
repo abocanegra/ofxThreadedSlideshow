@@ -22,7 +22,14 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    void loadContent();
+    void scalePosContent();
+
 protected:
-    ofImage slide;
+    ofImage slideImg;
+    ofVideoPlayer slideMov;
     ofxThreadedSlideshow slideshow;
+    string contentType;
+    int imageDuration;
+    int modelDuration;
 };

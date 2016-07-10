@@ -9,7 +9,6 @@
 /// abocanegra@nontrivialstudio.com 
 /// Not Complete - Features to be built:
 /// web loading remote images via url
-/// Add ability to include videos
 class ofxThreadedSlideshow: public ofThread
 {
 public:
@@ -32,6 +31,9 @@ public:
         stretch = false;
     }
 
+    ~ofxThreadedSlideshow(){
+    }
+
     /// Start the thread.
     void start()
     {
@@ -51,12 +53,19 @@ public:
     }
 
     void setup(){
+        //Images
         this->dir.allowExt("png");
         this->dir.allowExt("jpg");
         this->dir.allowExt("bmp");
         this->dir.allowExt("gif");
         this->dir.allowExt("tif");
         this->dir.allowExt("psd");
+        //Videos
+        this->dir.allowExt("ogv");
+        this->dir.allowExt("mxf");
+        this->dir.allowExt("mp4");
+        this->dir.allowExt("mpeg");
+       // this->dir.allowExt("mov"); //Quicktime is deprecated, so why bother.
 
         this->dir.listDir(this->folder + "/");
         this->dir.sort();
@@ -121,7 +130,7 @@ public:
         }
     }
 
-    string currentImage(){
+    void nextContent(){
         if(this->currImg < (int)this->dir.size()-1){
             this->currImg++;
         }else{
@@ -129,10 +138,9 @@ public:
         }
         this->isNewFrame = false;
         time(&this->startTime);
-        return this->dir.getPath(this->currImg);
     }
 
-    string previousImage(){
+    void previousContent(){
         if(this->currImg > 0){
             this->currImg--;
         }else{
@@ -140,6 +148,9 @@ public:
         }
         this->isNewFrame = false;
         time(&this->startTime);
+    }
+
+    string currentContent(){
         return this->dir.getPath(this->currImg);
     }
 
@@ -155,11 +166,11 @@ public:
             // called if lock() returned true above.
             if(this->showInfo){
                 this->info = "Images: "
-                        + ofToString( getTotalImages() )
+                        + ofToString( getTotalContentCount() )
                         + " | Time: "
                         + ofToString( timeDiff() )
                         + " | Current: "
-                        + getCurrentImageName();
+                        + getCurrentContentName();
             }
             unlock();
 
@@ -180,16 +191,41 @@ public:
 
     }
 
-    int getTotalImages(){
+    string getExtension(){
+        string ext =  (this->dir.getPath(this->currImg).substr(
+                        this->dir.getPath(this->currImg).find_last_of(".") + 1));
+        return ext;
+    }
+
+    string getContentType(){
+        string ext = ofToLower( this->getExtension() );
+        if(ext == "jpg" || ext == "jpeg" ||
+                ext == "png" || ext == "gif" ||
+               ext == "tif" || ext =="psd" ||
+                ext =="bmp"){
+            return "image";
+        }else if(ext =="mp4" || ext == "ogv" ||
+                 ext == "mxf" || ext == "mpeg"
+                  ){
+            return "video";
+        }else if(ext == "3ds"){
+            return "3dmodel";
+        }else{
+            return "unkown format";
+        }
+    }
+
+    int getTotalContentCount(){
         return this->dir.size();
     }
 
-    string getCurrentImageName(){
+    string getCurrentContentName(){
         if(this->currImg >= 0){
             return this->dir.getName(this->currImg);
         }
         return "";
     }
+
 
     void setPosSize(float imgWidth, float imgHeight){
         if(this->stretch){
