@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxThreadedSlideshow.h"
+#include "ofxAssimpModelLoader.h"
+#include "ofVboMesh.h"
 
 class ofApp : public ofBaseApp{
 
@@ -24,12 +26,23 @@ public:
 
     void loadContent();
     void scalePosContent();
-
+    void drawSlideshow();
+    void updateSlideshow();
+    void clearSlides();
 protected:
     ofImage slideImg;
     ofVideoPlayer slideMov;
     ofxThreadedSlideshow slideshow;
     string contentType;
-    int imageDuration;
-    int modelDuration;
+    float imageDuration;
+    float modelDuration;
+
+    float windowW;
+    float windowH;
+
+    //3D Model
+    ofxAssimpModelLoader slideModel;
+    ofLight	light;
+    float rotateIter;
+    float rat;
 };
