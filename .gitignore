@@ -37,3 +37,4 @@ gen-external-apklibs
 reports
 obj
 assets
+restageEOLSettings_linux_PostClone.sh
