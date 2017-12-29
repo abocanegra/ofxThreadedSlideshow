@@ -3,14 +3,6 @@
 #include "ofThread.h"
 #include <time.h>
 
-<<<<<<< HEAD
-/// This is a simple threaded slideshow addon.
-/// Creative Commons Attribution-ShareAlike 4.0 International License
-/// Originally developed by Aaron Bocanegra @ Nontrivial Studio
-/// abocanegra@nontrivialstudio.com 
-/// Not Complete - Features to be built:
-/// web loading remote images via url
-=======
 /*
  * ofxThreadedSlideshow
 *
@@ -22,7 +14,6 @@
  * Originally developed by Aaron Bocanegra @ Nontrivial Studio
  * 2016
  */
->>>>>>> first commit
 class ofxThreadedSlideshow: public ofThread
 {
 public:
@@ -53,9 +44,6 @@ public:
     ~ofxThreadedSlideshow(){
     }
 
-    ~ofxThreadedSlideshow(){
-    }
-
     /// Start the thread.
     void start()
     {
@@ -69,37 +57,6 @@ public:
     void stop()
     {
         stopThread();
-<<<<<<< HEAD
-        cout << "End Slideshow Thread" << endl;
-    }
-
-    void setup(){
-        //Images
-        this->dir.allowExt("png");
-        this->dir.allowExt("jpg");
-        this->dir.allowExt("bmp");
-        this->dir.allowExt("gif");
-        this->dir.allowExt("tif");
-        this->dir.allowExt("psd");
-        //Videos
-        this->dir.allowExt("ogv");
-        this->dir.allowExt("mxf");
-        this->dir.allowExt("mp4");
-        this->dir.allowExt("mpeg");
-       // this->dir.allowExt("mov"); //Quicktime is deprecated, so why bother.
-
-        this->dir.listDir(this->folder + "/");
-        this->dir.sort();
-        this->slideshowInit = true;
-        this->isNewFrame = true;
-        if(this->fade){
-            this->fadeAlpha = 0;
-            this->fadeUp = true;
-        }else{
-            this->fadeAlpha = 255;
-        }
-=======
->>>>>>> first commit
     }
 
     /// Our implementation of threadedFunction.
@@ -150,11 +107,6 @@ public:
         }
     }
 
-<<<<<<< HEAD
-    void nextContent(){
-        if(this->currImg < (int)this->dir.size()-1){
-            this->currImg++;
-=======
     //Setup Slideshow and Initialize
     void setup(){
         //Is Internet Available?
@@ -202,7 +154,6 @@ public:
         if(this->fade){
             this->fadeAlpha = 0;
             this->fadeUp = true;
->>>>>>> first commit
         }else{
             this->fadeAlpha = 255;
         }
@@ -222,27 +173,13 @@ public:
         }
         if(this->mode == 1){
             this->setCurrNextInfo();
-            currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
+            this->currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
             this->content.setTo( this->currXMLSlide );
         }
         this->isNewFrame = false;
         time(&this->startTime);
     }
 
-<<<<<<< HEAD
-    void previousContent(){
-        if(this->currImg > 0){
-            this->currImg--;
-        }else{
-            this->currImg = this->dir.size()-1;
-        }
-        this->isNewFrame = false;
-        time(&this->startTime);
-    }
-
-    string currentContent(){
-        return this->dir.getPath(this->currImg);
-=======
     //Call Previous Content
     void previousContent(){
         if(this->getTotalContentCount()){
@@ -255,12 +192,11 @@ public:
         if(this->mode == 1){
             //Get Properties of Next Content
             this->setCurrNextInfo();
-            currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
+            this->currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
             this->content.setTo( this->currXMLSlide );
         }
         this->isNewFrame = false;
         time(&this->startTime);
->>>>>>> first commit
     }
 
     //return blur
@@ -270,28 +206,16 @@ public:
         }else if(this->mode == 1){
             return this->content.getFloatValue("blur");
         }
+        return 0.0f;
     }
 
-<<<<<<< HEAD
-        if(lock())
-        {
-            // The mutex is now locked and the "count"
-            // Unlock the mutex.  This is only
-            // called if lock() returned true above.
-            if(this->showInfo){
-                this->info = "Images: "
-                        + ofToString( getTotalContentCount() )
-                        + " | Time: "
-                        + ofToString( timeDiff() )
-                        + " | Current: "
-                        + getCurrentContentName();
-=======
     float getTrail(){
         if(this->mode == 0){
             return this->trail;
         }else if(this->mode == 1){
             return this->content.getFloatValue("trail");
         }
+        return 0.0f;
     }
 
     //Return Current Content String
@@ -313,9 +237,8 @@ public:
     int getNextCount(){
         if(this->currImg +1 < this->getTotalContentCount()){
             return this->currImg +1;
-        }else{
-            return 0;
         }
+         return 0;
     }
 
     string getExtension(){
@@ -350,12 +273,11 @@ public:
                 return "3dmodel";
             }else{
                 return "unkown format";
->>>>>>> first commit
             }
         }else if(this->mode == 1){
             return this->xmlCurrType;
         }
-	return 0;
+        return "";
     }
 
     string getNextExtension(){
@@ -388,7 +310,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlNextType;
         }
-	return "";
+    	return "";
     }
 
     int getTotalContentCount(){
@@ -397,7 +319,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlContentTotal;
         }
-	return ;
+        return 0;
     }
 
     string getCurrentContentName(){
@@ -411,39 +333,6 @@ public:
         return "";
     }
 
-<<<<<<< HEAD
-    string getExtension(){
-        string ext =  (this->dir.getPath(this->currImg).substr(
-                        this->dir.getPath(this->currImg).find_last_of(".") + 1));
-        return ext;
-    }
-
-    string getContentType(){
-        string ext = ofToLower( this->getExtension() );
-        if(ext == "jpg" || ext == "jpeg" ||
-                ext == "png" || ext == "gif" ||
-               ext == "tif" || ext =="psd" ||
-                ext =="bmp"){
-            return "image";
-        }else if(ext =="mp4" || ext == "ogv" ||
-                 ext == "mxf" || ext == "mpeg"
-                  ){
-            return "video";
-        }else if(ext == "3ds"){
-            return "3dmodel";
-        }else{
-            return "unkown format";
-        }
-    }
-
-    int getTotalContentCount(){
-        return this->dir.size();
-    }
-
-    string getCurrentContentName(){
-        if(this->currImg >= 0){
-            return this->dir.getName(this->currImg);
-=======
 
     void setCurrNextInfo(){
         if(this->currImg + 1 < this->getTotalContentCount()){
@@ -453,8 +342,8 @@ public:
         }
         this->xmlNextType = this->content.getValue("type");
         this->xmlNextName =  this->content.getValue("name");
-        currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
-        this->content.setTo(currXMLSlide);
+        this->currXMLSlide = "//slide[" + ofToString(this->currImg) + "]";
+        this->content.setTo(this->currXMLSlide);
         this->xmlCurrName = this->content.getValue("name");
         this->xmlCurrType = this->content.getValue("type");
         this->xmlCurrPath = this->content.getValue("path");
@@ -474,9 +363,7 @@ public:
             }else if(this->mode == 1){
                 return this->xmlNextName;
             }
->>>>>>> first commit
         }
-	return "";
     }
 
     void setXmlDuration(){
@@ -491,7 +378,6 @@ public:
     string getVideoMode(){
         return this->content.getValue("mode");
     }
-
 
     void setPosSize(float imgWidth, float imgHeight){
         if(this->stretch){
@@ -626,7 +512,6 @@ public:
                 this->scaledY = 0;
             }
         }
-
         this->currentWidth = imgWidth;
         this->currentHeight = imgHeight;
     }
@@ -666,7 +551,6 @@ public:
         }else if(this->mode == 1){
             return this->xmlMeshMode;
         }
-	return 0;
     }
 
     ofVec2f getImageSize(){
