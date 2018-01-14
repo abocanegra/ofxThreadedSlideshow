@@ -1,8 +1,6 @@
 #include "ofApp.h"
 #include "ofxThreadedSlideshow.h"
-<<<<<<< HEAD
 
-=======
 /*
  * ofxThreadedSlideshow Example
 *
@@ -14,7 +12,7 @@
  * Originally developed by Aaron Bocanegra @ Nontrivial Studio
  * 2016
  */
->>>>>>> first commit
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(false);
@@ -24,7 +22,7 @@ void ofApp::setup(){
 
     imageDuration = 10;
     modelDuration = 60;
-<<<<<<< HEAD
+
 
     //Setup Slideshow and start thread
     slideshow.folder = "images/slideshow";
@@ -32,7 +30,6 @@ void ofApp::setup(){
     slideshow.height = ofGetWindowHeight();
     slideshow.duration = imageDuration;
     slideshow.fade = true;
-=======
     windowW = ofGetWidth();
     windowH = ofGetHeight();
     //Setup Slideshow and start thread
@@ -41,31 +38,27 @@ void ofApp::setup(){
     slideshow.width = windowW;
     slideshow.height = windowH;
     slideshow.duration = imageDuration;
->>>>>>> first commit
     slideshow.showInfo = true;
     slideshow.center = true;
     slideshow.scale = true;
     slideshow.start();
-<<<<<<< HEAD
 
-    //Allocate Slide
-    slideImg.allocate(slideshow.width,slideshow.height,OF_IMAGE_COLOR_ALPHA);
-    slideMov.setPixelFormat(OF_PIXELS_RGBA);
-=======
     //Allocate Slide
     slideImg.allocate(slideshow.width,slideshow.height,OF_IMAGE_COLOR_ALPHA);
     slideMov.setPixelFormat(OF_PIXELS_RGBA);
     //Model
     ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
->>>>>>> first commit
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     std::stringstream strm;
-<<<<<<< HEAD
-    strm << ofToString( roundf(ofGetFrameRate()))+ "fps | " + slideshow.getCurrentContentName() ;
+    if(slideshow.isInitiated()){
+        strm << ofToString( roundf(ofGetFrameRate()))+ "fps | " + slideshow.getCurrentContentName() ;
+    }else{
+        strm << "Slideshow Not Loaded";
+    }
     ofSetWindowTitle(strm.str());
 
     if(slideshow.isThreadRunning() && slideshow.isNewFrame){
@@ -75,21 +68,13 @@ void ofApp::update(){
     if(slideshow.getContentType() == "video"){
         slideMov.update();
     }
-=======
 
-    if(slideshow.isInitiated()){
-        strm << ofToString( roundf(ofGetFrameRate()))+ "fps | " + slideshow.getCurrentContentName() ;
-    }else{
-        strm << "Slideshow Not Loaded";
-    }
-    ofSetWindowTitle(strm.str());
+
     updateSlideshow();
->>>>>>> first commit
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-<<<<<<< HEAD
     ofSetColor(255,slideshow.fadeAlpha);
     if(contentType == "image"){
         slideImg.draw(slideshow.getPos(), slideshow.scaledWidth, slideshow.scaledHeight);
@@ -122,8 +107,6 @@ void ofApp::loadContent(){
 
     }
 }
-
-=======
     drawSlideshow();
 }
 
@@ -306,50 +289,46 @@ void ofApp::loadContent(){
 }
 
 //--------------------------------------------------------------
->>>>>>> first commit
 void ofApp::scalePosContent(){
     if(contentType == "image"){
         slideshow.setPosSize(slideImg.getWidth(), slideImg.getHeight());
     }else if(contentType == "video"){
         slideshow.setPosSize(slideMov.getWidth(), slideMov.getHeight());
     }else if(contentType == "3dmodel"){
-<<<<<<< HEAD
 
     }
-=======
-        float yPos;
-        if(windowW != ofGetWidth() || windowH != ofGetHeight()){
-            slideModel.setScaleNormalization(false);
-            float w = ofGetWidth();
-            float h = ofGetHeight();
-            if(w >= h){
-                rat = h/windowH;
-                yPos = 0.9f;
-            }else{
-                rat =w/windowW;
-                yPos = 0.65f;
-            }
-            if(slideModel.getScale().x == 1){
-                slideModel.calculateDimensions();
-                slideModel.setScaleNormalization(true);
-                float modScale = slideModel.getScale().length() * 0.51f;
-                slideModel.setScale(modScale, modScale,modScale );
-                slideModel.setPosition(w/2.0f, h  * yPos , 0.0f);
-            }else{
-                slideModel.setScale(rat,rat,rat );
-                slideModel.setPosition(w/2.0f, h * yPos , 0.0f);
-            }
+    float yPos;
+    if(windowW != ofGetWidth() || windowH != ofGetHeight()){
+        slideModel.setScaleNormalization(false);
+        float w = ofGetWidth();
+        float h = ofGetHeight();
+        if(w >= h){
+            rat = h/windowH;
+            yPos = 0.9f;
         }else{
-            slideModel.calculateDimensions();
-            if(slideshow.width >= slideshow.height){
-                yPos =0.9f;
-            }else{
-                yPos = 0.65f;
-            }
-            slideModel.setScaleNormalization(true);
-            slideModel.setScale(1,1,1);
-            slideModel.setPosition(windowW/2.0f, windowH  * yPos , 0.0f);
+            rat =w/windowW;
+            yPos = 0.65f;
         }
+        if(slideModel.getScale().x == 1){
+            slideModel.calculateDimensions();
+            slideModel.setScaleNormalization(true);
+            float modScale = slideModel.getScale().length() * 0.51f;
+            slideModel.setScale(modScale, modScale,modScale );
+            slideModel.setPosition(w/2.0f, h  * yPos , 0.0f);
+        }else{
+            slideModel.setScale(rat,rat,rat );
+            slideModel.setPosition(w/2.0f, h * yPos , 0.0f);
+        }
+    }else{
+        slideModel.calculateDimensions();
+        if(slideshow.width >= slideshow.height){
+            yPos =0.9f;
+        }else{
+            yPos = 0.65f;
+        }
+        slideModel.setScaleNormalization(true);
+        slideModel.setScale(1,1,1);
+        slideModel.setPosition(windowW/2.0f, windowH  * yPos , 0.0f);
     }
 }
 
@@ -432,7 +411,6 @@ void ofApp::clearSlides(){
     slideMov.unbind();
     slideMov.closeMovie();
     cout << "Clear Content: " << " | Img: " << slideImg.isAllocated() << " | Model: " << slideModel.hasMeshes() << " | Mov: " << slideMov.isLoaded() << endl;
->>>>>>> first commit
 }
 
 //--------------------------------------------------------------
@@ -474,11 +452,7 @@ void ofApp::keyPressed(int key){
         }
     }
     if(key == OF_KEY_RIGHT){
-<<<<<<< HEAD
-        if(slideshow.slideshowInit){
-=======
         if(slideshow.isInitiated()){
->>>>>>> first commit
             slideshow.fadeAlpha = 255;
             slideshow.nextContent();
             loadContent();
@@ -486,11 +460,7 @@ void ofApp::keyPressed(int key){
     }
 
     if(key == OF_KEY_LEFT){
-<<<<<<< HEAD
-        if(slideshow.slideshowInit){
-=======
         if(slideshow.isInitiated()){
->>>>>>> first commit
             slideshow.fadeAlpha = 255;
             slideshow.previousContent();
             loadContent();
@@ -539,11 +509,7 @@ void ofApp::windowResized(int w, int h){
     slideshow.height = h;
     slideshow.fontY = ofGetWindowHeight() - 20;
 
-<<<<<<< HEAD
-    if(slideshow.slideshowInit){
-=======
     if(slideshow.isInitiated()){
->>>>>>> first commit
         scalePosContent();
     }
 }
