@@ -2,8 +2,12 @@
 
 #include "ofMain.h"
 #include "ofxThreadedSlideshow.h"
+<<<<<<< HEAD
 #include "Poco/XML/XML.h"
 //#include "ofxXmlPoco.h"
+=======
+#include "ofxXmlPoco.h"
+>>>>>>> b289fc3948989d49eec67cbe3d8e042d36929171
 
 class ofApp : public ofBaseApp{
 public:
