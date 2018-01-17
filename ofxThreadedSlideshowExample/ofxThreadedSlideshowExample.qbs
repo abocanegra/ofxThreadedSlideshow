@@ -19,6 +19,7 @@ Project{
 
         of.addons: [
             'ofxThreadedSlideshow',
+            'ofxAssimpModelLoader',
             'ofxPoco',
         ]
 

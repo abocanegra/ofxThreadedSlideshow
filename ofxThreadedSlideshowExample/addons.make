@@ -1,2 +1,3 @@
 ofxThreadedSlideshow
+ofxAssimpModelLoader
 ofxPoco

@@ -1,27 +1,35 @@
-#pragma once
+﻿#pragma once
+
+#ifndef _OFXTHREADEDSLIDESHOW_APP
+#define _OFXTHREADEDSLIDESHOW_APP
+
 #include "ofMain.h"
 #include "ofThread.h"
 #include <time.h>
-#include "pugixml.hpp"
 #include "ofxXmlPoco.h"
 
 /*
+ *
  * ofxThreadedSlideshow
-*
+ *
  * A threaded slideshow capable of playing images, video, and 3d models from
- * a folder or via local or remote XML file. Handles local or remote content, and
+ * a folder0861-3C86 or via local or remote XML file. Handles local or remote content, and
  * streaming video as well as IP video
  *
  * Creative Commons Attribution-ShareAlike 4.0 International License
  * Originally developed by Aaron Bocanegra @ Nontrivial Studio
  * 2016
  */
-class ofxThreadedSlideshow: public ofThread
+
+
+
+class ofxThreadedSlideshow : public ofThread
 {
 public:
     ofxThreadedSlideshow()
     {
         mode                 = 1; // 0 = Local Folder, 1 = XML
+        defaultMeshMode      = 2;//0,1,2
         folder               = "images/slideshow";
         xml                  = "images/slideshow/content.xml";
         width                = 1920;
@@ -38,9 +46,11 @@ public:
         stretch              = false;
         isLoaded             = false;
         slideshowInit        = false;
-        defaultMeshMode      = 2;//0,1,2
-        blur                 = 0;
-        trail                = 0;
+        fadeUp     	         = false;
+        isNewFrame	         = false;
+        blur                 = 0.0f;
+        trail                = 0.0f;
+        currImg		         = -1;
     }
 
     ~ofxThreadedSlideshow(){
@@ -229,7 +239,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlCurrPath;
         }
-    return "";
+        return "";
     }
 
     int getCurrentCount(){
@@ -240,7 +250,7 @@ public:
         if(this->currImg +1 < this->getTotalContentCount()){
             return this->currImg +1;
         }
-         return 0;
+        return 0;
     }
 
     string getExtension(){
@@ -248,7 +258,7 @@ public:
         if(this->mode == 0){
             ext =  (this->dir.getPath(this->currImg).substr(
                         this->dir.getPath(this->currImg).find_last_of(".") + 1));
-        }else if(this->mode ==1){
+        }else if(this->mode == 1){
             ext =  (this->content.getValue("path").substr(
                         this->content.getValue("path").find_last_of(".") + 1));
         }
@@ -349,7 +359,7 @@ public:
         this->xmlCurrName = this->content.getValue("name");
         this->xmlCurrType = this->content.getValue("type");
         this->xmlCurrPath = this->content.getValue("path");
-        this->xmlMeshMode =this->content.getValue<int>("meshmode");
+        this->xmlMeshMode =this->content.getIntValue("meshmode");
     }
 
     string getNextContentName(){
@@ -369,11 +379,11 @@ public:
     }
 
     void setXmlDuration(){
-        this->duration = this->content.getValue<float>("duration");
+        this->duration = this->content.getFloatValue("duration");
     }
 
     float getXmlDuration(){
-        return this->content.getValue<float>("duration");
+        return this->content.getFloatValue("duration");
     }
 
     //livestream (set manual duration) - file (get duration from video)
@@ -553,6 +563,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlMeshMode;
         }
+        return this->defaultMeshMode;
     }
 
     ofVec2f getImageSize(){
@@ -561,18 +572,10 @@ public:
 
     //Is Net Available
     bool internetAccess(){
-        int ping_ret;
-        int status = system("ping -c 2 8.8.8.8");
+        int status = system("ping -w 2 8.8.8.8");
         if (-1 != status){
-            ping_ret = WEXITSTATUS(status);
-
-            if(ping_ret==0){
-                this->netAccess = true;
-                return true;
-            }else{
-                this->netAccess = false;
-                return false;
-            }
+            this->netAccess = true;
+            return true;
         }
         this->netAccess = false;
         return false;
@@ -594,7 +597,7 @@ public:
     int scaledX;
     int scaledY;
     ofColor fontColor;
-    bool slideshowInit = false;
+    bool slideshowInit;
     bool center;
     bool scale;
     bool stretch;
@@ -610,6 +613,7 @@ public:
     float blur;
     float trail;
     bool netAccess;
+    int currImg;
 
 protected:
     //Timer
@@ -651,13 +655,14 @@ protected:
     string xmlNextType;
     string xmlCurrName;
     string xmlCurrType;
-    string xmlCurrPath;up
-    int currImg     = -1;
-    bool fadeUp     = false;
-    bool isNewFrame = false;
+    string xmlCurrPath;
+    bool fadeUp;
+    bool isNewFrame;
     ofDirectory dir;
     time_t startTime;
     time_t currentTime;
     string info;
 private:
+    //private vars
 };
+#endif

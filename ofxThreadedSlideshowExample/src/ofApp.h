@@ -1,9 +1,13 @@
 #pragma once
+#ifndef _EXAMPLE_OFXTHREADEDSLIDESHOW
+#define _EXAMPLE_OFXTHREADEDSLIDESHOW
 
 #include "ofMain.h"
 #include "ofxThreadedSlideshow.h"
-#include "Poco/XML/XML.h"
-//#include "ofxXmlPoco.h"
+#include "ofVboMesh.h"
+#include "ofxAssimpModelLoader.h"
+#include "ofxXmlPoco.h"
+
 
 class ofApp : public ofBaseApp{
 public:
@@ -26,14 +30,19 @@ public:
     void loadContent();
     void scalePosContent();
     void updateSlideshow();
+    void drawSlideshow();
+    void clearSlides();
 
+    ofImage texture;
     int windowW,windowH;
 protected:
-    ofImage slideImg;
-    ofVideoPlayer slideMov;
-    ofAs
-    ofxThreadedSlideshow slideshow;
-    string contentType;
-    int imageDuration;
-    int modelDuration;
+    ofImage                 slideImg;
+    ofVideoPlayer		    slideMov;
+    ofxAssimpModelLoader	slideModel;
+    ofxThreadedSlideshow	slideshow;
+    ofLight			        light;
+    string			        contentType;
+    int imageDuration, modelDuration;
+    float rotateIter, rat;
 };
+#endif

@@ -2,7 +2,7 @@
 
 /*
  * ofxThreadedSlideshow Example
-*
+ *
  * A threaded slideshow capable of playing images, video, and 3d models from
  * a folder or via local or remote XML file. Handles local or remote content, and
  * streaming video as well as IP video
@@ -21,7 +21,6 @@ void ofApp::setup(){
 
     imageDuration = 10;
     modelDuration = 60;
-
 
     //Setup Slideshow and start thread
     slideshow.folder = "images/slideshow";
@@ -47,7 +46,7 @@ void ofApp::setup(){
     slideMov.setPixelFormat(OF_PIXELS_RGBA);
     //Model
     ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
-
+    texture.getTexture().setTextureWrap( GL_REPEAT, GL_REPEAT );
 }
 
 //--------------------------------------------------------------
@@ -59,7 +58,6 @@ void ofApp::update(){
         strm << "Slideshow Not Loaded";
     }
     ofSetWindowTitle(strm.str());
-
     if(slideshow.isThreadRunning() && slideshow.isFrameNew()){
         slideshow.nextContent();
         loadContent();
@@ -67,8 +65,6 @@ void ofApp::update(){
     if(slideshow.getContentType() == "video"){
         slideMov.update();
     }
-
-
     updateSlideshow();
 }
 
@@ -86,34 +82,10 @@ void ofApp::draw(){
     slideshow.draw();
 }
 
-void ofApp::loadContent(){
-    contentType = slideshow.getContentType();
-    slideMov.closeMovie();
-    if(contentType == "image"){
-        slideshow.duration = imageDuration;
-        slideImg.load(slideshow.currentContent());
-        slideshow.setPosSize(slideImg.getWidth(), slideImg.getHeight());
-    }else if(contentType == "video"){
-        slideMov.load(slideshow.currentContent());
-        slideshow.setPosSize(slideMov.getWidth(), slideMov.getHeight());
-        slideshow.duration = slideMov.getDuration();
-        slideMov.setLoopState(OF_LOOP_NONE);
-        slideMov.play();
-    }else if(contentType == "3dmodel"){
-        slideshow.duration = modelDuration;
-
-    }else if(contentType == "unkown format"){
-
-    }
-}
-    drawSlideshow();
-}
-
 //--------------------------------------------------------------
 void ofApp::loadContent(){
     contentType = slideshow.getContentType();
     clearSlides();
-
     //------------------------- Image
     if(contentType == "image"){
 
@@ -145,7 +117,7 @@ void ofApp::loadContent(){
             }
             i++;
         }
-        //------------------------------Video
+    //------------------------------Video
     }else if(contentType == "video"){
         slideMov.setLoopState(OF_LOOP_NONE);
         //If connected to internet
@@ -184,7 +156,6 @@ void ofApp::loadContent(){
             }
             j++;
         }
-
         if(slideshow.mode == 0 ){
             if(slideMov.getDuration() > 0){
                 slideshow.duration = slideMov.getDuration();
@@ -192,7 +163,6 @@ void ofApp::loadContent(){
                 slideshow.duration = 60;
             }
         }
-
         if(slideshow.mode == 1){
             if(slideshow.getXmlDuration() == 0 &&
                     slideshow.getVideoMode() == "file"){
@@ -216,11 +186,9 @@ void ofApp::loadContent(){
                 slideshow.restartTimer();
             }
         }
-
         if(slideMov.getDuration() >0){
             slideshow.duration = slideMov.getDuration();
         }
-
         int k = 0;
         int sleepyTimek = 100;
         while(slideMov.getWidth()<=0){
@@ -246,14 +214,12 @@ void ofApp::loadContent(){
         }else if(slideshow.mode==1){
             slideshow.setXmlDuration();
         }
-
         //If connected to internet
         if(!slideshow.netAccess && ofIsStringInString(slideshow.currentContent(), "http")){
             slideshow.nextContent();
             loadContent();
             return;
         }
-
         int i = 0;
         int sleepyTime = 100;
         //Load Model
@@ -276,12 +242,11 @@ void ofApp::loadContent(){
         }else{
             slideModel.setPausedForAllAnimations(true);
         }
-    }else if(contentType == "unkown format"){
+    }else if(contentType == "unknown format"){
         slideshow.nextContent();
         loadContent();
         return;
     }
-
     scalePosContent();
     slideshow.restartTimer();
     cout << "End Load Content: " << slideshow.currentContent() << " : " << slideImg.isAllocated() << " : " << slideModel.hasMeshes() << " : " << slideMov.isLoaded() << endl;
