@@ -2,9 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxThreadedSlideshow.h"
+#include "ofxXmlPoco.h"
 
 class ofApp : public ofBaseApp{
-
 public:
     void setup();
     void update();
@@ -24,10 +24,13 @@ public:
 
     void loadContent();
     void scalePosContent();
+    void updateSlideshow();
 
+    int windowW,windowH;
 protected:
     ofImage slideImg;
     ofVideoPlayer slideMov;
+    ofAs
     ofxThreadedSlideshow slideshow;
     string contentType;
     int imageDuration;
