@@ -2,6 +2,8 @@
 #include "ofMain.h"
 #include "ofThread.h"
 #include <time.h>
+#include "pugixml.hpp"
+#include "ofxXmlPoco.h"
 
 /*
  * ofxThreadedSlideshow
@@ -227,7 +229,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlCurrPath;
         }
-	return "";
+    return "";
     }
 
     int getCurrentCount(){
@@ -310,7 +312,7 @@ public:
         }else if(this->mode == 1){
             return this->xmlNextType;
         }
-    	return "";
+        return "";
     }
 
     int getTotalContentCount(){
@@ -603,7 +605,7 @@ public:
     int xmlContentTotal;
     float ratio;
     ofTrueTypeFont font;
-    ofXml content;
+    ofxXmlPoco content;
     string xml;
     float blur;
     float trail;
@@ -649,7 +651,7 @@ protected:
     string xmlNextType;
     string xmlCurrName;
     string xmlCurrType;
-    string xmlCurrPath;
+    string xmlCurrPath;up
     int currImg     = -1;
     bool fadeUp     = false;
     bool isNewFrame = false;
