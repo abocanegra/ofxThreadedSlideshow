@@ -1,2 +1,5 @@
-ofxThreadedSlideshow
 ofxPoco
+ofxThreadedSlideshow
+ofxGui
+ofxAssimpModelLoader
+ofxPixelsExtended

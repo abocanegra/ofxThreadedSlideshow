@@ -2,13 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxThreadedSlideshow.h"
-<<<<<<< HEAD
 #include "Poco/XML/XML.h"
-//#include "ofxXmlPoco.h"
-=======
 #include "ofxXmlPoco.h"
->>>>>>> b289fc3948989d49eec67cbe3d8e042d36929171
-
+#include "ofxAssimpModelLoader.h"
+#include "ofxPixelsExtended.h"
 class ofApp : public ofBaseApp{
 public:
     void setup();
@@ -35,7 +32,7 @@ public:
 protected:
     ofImage slideImg;
     ofVideoPlayer slideMov;
-    ofAs
+    ofxAssimpModelLoader slideModel;
     ofxThreadedSlideshow slideshow;
     string contentType;
     int imageDuration;

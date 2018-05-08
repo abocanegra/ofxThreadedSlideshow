@@ -256,7 +256,7 @@ void ofApp::loadContent(){
 
         int i = 0;
         int sleepyTime = 100;
-        //Load Model
+        //Load
         slideModel.loadModel(slideshow.currentContent(), true);
         while(!slideModel.hasMeshes() && slideModel.getMeshCount() <=0){
             ofSleepMillis(sleepyTime);
